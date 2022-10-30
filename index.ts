@@ -1,7 +1,7 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import { userRouter } from "./routes";
+import { authRouter, userRouter } from "./routes";
 
 dotenv.config({ path: "./.env" });
 const app: Express = express();
@@ -18,6 +18,7 @@ mongoose
     console.log(error);
   });
 
+app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 
 app.listen(PORT || 8000, () => {
