@@ -1,24 +1,15 @@
 import { UserModel } from "../model";
 import { Request, Response } from "express";
 import { Error } from "mongoose";
-
-interface IRegister {
-  userName: string;
-  email: string;
-  password: string;
-  isAdmin?: boolean;
-}
+import { IRegister } from "../@types/auth";
 
 ///Register
 const register = async (req: Request, res: Response) => {
   const body: IRegister = req.body;
-  const User = new UserModel({
-    userName: body.userName,
-    email: body.email,
-    password: body.password,
-  });
+
   try {
-    const savedUser = await User.save();
+    // const savedUser = await UserModel.register(body.email,body.password,body.userName)
+    const savedUser = await UserModel.register(body);
     res.status(201).json({
       status: "success",
       savedUser,
