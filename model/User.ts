@@ -5,23 +5,15 @@ import bcrypt from "bcrypt";
 
 import { IRegister } from "../@types/auth";
 
-interface IUser {
-  userName: string;
-  email: string;
-  password: string;
-  isAdmin?: boolean;
+interface UserModel extends Model<IRegister> {
+  register(data: IRegister): Promise<HydratedDocument<IRegister>>;
 }
 
-interface UserModel extends Model<IUser, {}, IRegister> {
-  register(data: IRegister): Promise<HydratedDocument<IUser, IRegister>>;
-}
-
-const UserSchema = new mongoose.Schema<IUser>(
+const UserSchema = new mongoose.Schema<IRegister>(
   {
     userName: {
       type: String,
       required: [true, "UserName is required"],
-      unique: true,
     },
     email: {
       type: String,
@@ -62,6 +54,6 @@ UserSchema.statics.register = async function (data: IRegister) {
   return user;
 };
 
-const UserModel = mongoose.model<IUser, UserModel>("User", UserSchema);
+const UserModel = mongoose.model<IRegister, UserModel>("User", UserSchema);
 
 export default UserModel;

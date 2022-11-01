@@ -4,3 +4,8 @@ export interface IRegister {
   password: string;
   isAdmin?: boolean;
 }
+
+export interface ILogin {
+  email: string;
+  password: string;
+}
