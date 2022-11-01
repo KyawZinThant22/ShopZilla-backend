@@ -1,11 +1,22 @@
 import { UserModel } from "../model";
 import { Request, Response } from "express";
-import { Error } from "mongoose";
 import { ILogin, IRegister } from "../@types/auth";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-///Register
+const SEC_KEY = process.env.SEC_KEY;
 
+// const createToken = (id: number | string, isAdmin: boolean) => {
+//   return jwt.sign({ id, isAdmin }, SEC_KEY, {
+//     expiresIn: "120",
+//   });
+// };
+
+const createToken = (id: number | string, isAdmin: boolean | undefined) => {
+  return jwt.sign({ id, isAdmin }, SEC_KEY as string, {
+    expiresIn: "120",
+  });
+};
 // @desc Register new user
 // @route POST /auth/register
 // @access Public
@@ -17,7 +28,8 @@ const register = async (req: Request, res: Response) => {
     const savedUser = await UserModel.register(body);
     res.status(201).json({
       status: "success",
-      savedUser,
+      id: savedUser.id,
+      token: createToken(savedUser.id, savedUser.isAdmin),
     });
   } catch (error: any) {
     res.status(400).json({
@@ -39,9 +51,8 @@ const Login = async (req: Request, res: Response) => {
     res.status(200).json({
       status: "success",
       data: {
-        userName: user.userName,
         id: user.id,
-        email: user.email,
+        token: createToken(user.id, user.isAdmin),
       },
     });
   } else {
