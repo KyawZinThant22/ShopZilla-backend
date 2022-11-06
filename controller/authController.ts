@@ -14,7 +14,7 @@ const SEC_KEY = process.env.SEC_KEY;
 
 const createToken = (id: number | string, isAdmin: boolean | undefined) => {
   return jwt.sign({ id, isAdmin }, SEC_KEY as string, {
-    expiresIn: "120",
+    expiresIn: "2d",
   });
 };
 // @desc Register new user
