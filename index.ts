@@ -1,10 +1,11 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
+import cors from "cors";
 import { authRouter, userRouter } from "./routes";
 
 dotenv.config({ path: "./.env" });
 const app: Express = express();
+app.use(cors());
 
 app.use(express.json());
 

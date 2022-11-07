@@ -53,6 +53,8 @@ const Login = async (req: Request, res: Response) => {
       data: {
         id: user.id,
         token: createToken(user.id, user.isAdmin),
+        userName: user.userName,
+        email: user.email,
       },
     });
   } else {
@@ -63,4 +65,25 @@ const Login = async (req: Request, res: Response) => {
   }
 };
 
-export const authController = { register, Login };
+const accountValidate = async (req: any, res: Response) => {
+  const rawId = req.id;
+  const token = req.headers.token.split(" ")[1];
+
+  try {
+    const User = await UserModel.findById(rawId);
+    res.status(200).json({
+      status: "success",
+      data: {
+        User,
+        token,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+
+export const authController = { register, Login, accountValidate };

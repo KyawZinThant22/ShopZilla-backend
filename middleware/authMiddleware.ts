@@ -8,7 +8,6 @@ const verifyToken = async (req: any, res: Response, next: NextFunction) => {
   if (authHeader) {
     let token = authHeader.split(" ")[1];
     Jwt.verify(token, process.env.SEC_KEY as string, (err: any, user: any) => {
-      console.log(err);
       if (err) {
         res.status(403).json({
           status: "fail",
@@ -16,6 +15,7 @@ const verifyToken = async (req: any, res: Response, next: NextFunction) => {
         });
       } else {
         req.user = user;
+        req.id = user.id;
         next();
       }
     });
